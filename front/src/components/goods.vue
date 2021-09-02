@@ -3,7 +3,7 @@
  * @Author: yizheng.yuan
  * @Date: 2019-12-26 00:20:01
  * @LastEditors: yizheng.yuan
- * @LastEditTime: 2021-09-02 21:02:04
+ * @LastEditTime: 2021-09-02 22:02:24
  -->
 <template>
     <div>
@@ -123,41 +123,40 @@
     export default {
         data() {
             return {
-              data: [{
-              id: 1,
-              label: '一级 1',
-              children: [{
-                id: 4,
-                label: '二级 1-1',
-                children: [{
-                  id: 9,
-                  label: '三级 1-1-1'
-                }, {
-                  id: 10,
-                  label: '三级 1-1-2'
-                }]
-              }]
-            }, {
-              id: 2,
-              label: '一级 2',
-              children: [{
-                id: 5,
-                label: '二级 2-1'
-              }, {
-                id: 6,
-                label: '二级 2-2'
-              }]
-            }, {
-              id: 3,
-              label: '一级 3',
-              children: [{
-                id: 7,
-                label: '二级 3-1'
-              }, {
-                id: 8,
-                label: '二级 3-2'
-              }]
-              }],
+              data: [],
+              temp_data: [
+                {
+                  id: "afghjk1324",
+                  label: '一级 1',
+                  
+                  children: [
+                    {
+                      id: "fgdhjjg1233",
+                      arr: ['afghjk1324'],
+                      label: '二级 1-1',
+                      children: [{
+                        id: 9,
+                        arr: ['afghjk1324','fgdhjjg1233'],
+                        label: '三级 1-1-1'
+                      }, {
+                        id: 10,
+                        label: '三级 1-1-2'
+                      }]
+                    }
+                  ]
+                }, 
+                {
+                  id: 2,
+                  label: '2',
+                  children: [{
+                    id: 5,
+                    label: '二级 2-1'
+                  }, {
+                    id: 6,
+                    label: '二级 2-2'
+                  }]
+                }
+              ],
               defaultProps: {
                 children: 'children',
                 label: 'label'
@@ -223,8 +222,25 @@
         mounted() {
             this.getGoodsList();
             // this.getGoodsCount();
+            this.dealFun(this.temp_data)
         },
         methods: {
+            dealFun(arr){
+              for(let i = 0; i < arr.length; i++){
+                if(arr[i].children){
+                  this.loopFun(arr[i].children, arr[i].id)
+                }
+              }
+              console.error('最终的结果',arr);
+            },
+            loopFun(arr, fatherId){
+              for(let i = 0; i < arr.length; i++){
+                arr[i].id = fatherId+'_'+arr[i].id;
+                if(arr[i].children){
+                  this.loopFun(arr[i].children, arr[i].id)
+                }
+              }
+            },
             searchGood(){
                 console.log('商品id:',this.keyWord);
                 this.keyWord = this.keyWord.trim()
