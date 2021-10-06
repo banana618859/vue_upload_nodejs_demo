@@ -3,7 +3,7 @@
  * @Author: yizheng.yuan
  * @Date: 2019-12-26 00:20:01
  * @LastEditors: yizheng.yuan
- * @LastEditTime: 2021-10-06 14:33:03
+ * @LastEditTime: 2021-10-06 15:21:41
  -->
 <template>
     <div>
@@ -28,7 +28,7 @@
                 v-model="keyWord"
                 style="width:200px" size="mini"></el-input>
             <el-button type="success" size="mini" @click="searchGood">search</el-button>
-            <el-button size="mini" type="primary" @click="showAddGoodsFun">新增商品1</el-button>
+            <el-button size="mini" type="primary" @click="showAddGoodsFun">新增商品/视频</el-button>
             
             <!-- <el-button size="mini" type="danger" @click="delMoreGoods">批量删除商品</el-button> -->
         </div>
@@ -62,12 +62,12 @@
         </el-table>
 
         <el-dialog title="编辑商品" :visible.sync="dialogVisible" width="35%" :before-close="handleClose">
-            <el-form :model="ruleForm" :rules="rules" size="mini" ref="ruleForm" label-width="100px"
+            <el-form :model="ruleForm" :rules="rules" size="mini" ref="ruleForm" label-width="120px"
                 class="demo-ruleForm">
                 <el-form-item label="商品名称" prop="name" required>
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="商品图片1" prop="goodImg" required>
+                <el-form-item label="商品图片/视频" prop="goodImg" required>
                     <span class="goodImg">
                         <!-- <img :src="form.goodImg" width="50px" /> -->
                         <el-upload class="avatar-uploader" action="/aaa" :on-change="onchange"
@@ -91,21 +91,24 @@
         </el-dialog>
 
         <el-dialog title="新增商品" :visible.sync="showAddGoods" width="35%">
-            <el-form ref="form" size="mini" :model="addForm" label-width="80px">
+            <el-form ref="form" size="mini" :model="addForm" label-width="120px">
                 <el-form-item label="商品名称">
                     <el-input v-model="addForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="商品图片1">
-                    <span class="goodImg">
+                <el-form-item label="商品图片/视频">
+                    <div class="goodImg">
                         <!-- <img :src="form.goodImg" width="50px" /> -->
                         <el-upload class="avatar-uploader" action="/aaa" 
                             :on-change="onchange"
                             :before-upload="beforeupload" 
                             :show-file-list="false">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <div v-if="imageUrl" class="vCenter">
+                              <i v-if="imageUrl.includes('mp4')" style="font-size: 50px;" class="el-icon-video-camera"></i>
+                              <img v-else :src="imageUrl" class="avatar">
+                            </div>
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
-                    </span>
+                    </div>
                 </el-form-item>
                 <el-form-item label="商品价格">
                     <el-input style="width: 90%;" v-model="addForm.price"></el-input>
@@ -605,6 +608,14 @@
     }
 </script>
 <style scoped>
+  /* 元素垂直居中 */
+  .vCenter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
   .videoBox{
     width: 300px;
     height: 200px;
@@ -618,6 +629,10 @@
   }
   /deep/ .el-dialog__body {
       padding: 0 20px;
+  }
+  /deep/ .avatar-uploader,/deep/ .el-upload{
+    width: 100%;
+    height: 100%;
   }
 
   .goodImg {
