@@ -3,7 +3,7 @@
  * @Author: yizheng.yuan
  * @Date: 2019-12-16 21:06:26
  * @LastEditors: yizheng.yuan
- * @LastEditTime: 2021-09-02 20:57:37
+ * @LastEditTime: 2021-10-06 14:29:24
  */
 
 const express = require("express"); //express 框架
@@ -42,12 +42,43 @@ app.all("*", function (req, res, next) {
 });
 
 // 静态服务器
-app.use(express.static(__dirname + '/public')); // 这一句好像没生效，不知为什么
+// app.use(express.static(__dirname + '/public')); // 这一句好像没生效，不知为什么
 // app.use(express.static('public'));
-app.get('/public/*', function (req, res) {
-  res.sendFile(__dirname + "/" + req.url);
+// 视频流
+
+const {stat} = require('fs').promises
+app.get('/public/*', async function (req, res) {
+  if(req.url.includes('mp4')){
+    const video = __dirname + "/" + req.url
+    let range = req.headers['range']
+    if (range) {
+      let stats = await stat(video)
+      let r = range.match(/=(\d+)-(\d+)?/)
+      console.log(range)
+      let start = parseInt(r[1], 10)
+      let end = r[2] ? parseInt(r[2], 10) : start + 1024 * 1024
+      if(end > stats.size -1) end = stats.size - 1
+      let header = {
+        'Content-Type': 'video/mp4',
+        'Content-Range': `bytes ${start} - ${end} / ${stats.size}`,
+        'Content-Length': end - start + 1,
+        'Accept-Ranges': 'bytes'
+      }
+      res.writeHead(206,header)
+      fs.createReadStream(video,{start:start,end:end}).pipe(res)
+    } else {
+      fs.createReadStream(video).pipe(res)
+    }
+  }else{
+    res.sendFile(__dirname + "/" + req.url);
+  }
   console.log("Request for " + req.url + " received.");
 })
+
+// app.get('/video', async (req, res) => {
+  
+// })
+// 原文链接：https://blog.csdn.net/qq_43505774/article/details/118971681
 
 
 //新增商品

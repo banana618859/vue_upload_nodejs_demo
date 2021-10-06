@@ -3,7 +3,7 @@
  * @Author: yizheng.yuan
  * @Date: 2019-12-26 00:20:01
  * @LastEditors: yizheng.yuan
- * @LastEditTime: 2021-09-02 22:02:24
+ * @LastEditTime: 2021-10-06 14:33:03
  -->
 <template>
     <div>
@@ -39,9 +39,13 @@
             </el-table-column>
             <el-table-column prop="_id" label="商品ID" width="150">
             </el-table-column>
-            <el-table-column prop="goodImg" label="商品图片" width="120">
+            <el-table-column prop="goodImg" label="商品图片" width="380">
                 <template slot-scope="scope">
-                    <img :src="scope.row.goodImg" width="40px" />
+                    <img v-if="!scope.row.goodImg.includes('.mp4')" :src="scope.row.goodImg" width="40px" />
+                    <video v-else :src="scope.row.goodImg" class="videoBox" controls="controls">
+                      <!-- https://www.w3school.com.cn/i/movie.ogg -->
+                      your browser does not support the video tag
+                    </video>
                 </template>
             </el-table-column>
             
@@ -601,58 +605,64 @@
     }
 </script>
 <style scoped>
-    .pageTitle{
-        height: 30px;
-        line-height: 30px;
-        padding: 5px 10px; text-align: left;background-color: #eee;
-    }
-    /deep/ .el-dialog__body {
-        padding: 0 20px;
-    }
+  .videoBox{
+    width: 300px;
+    height: 200px;
+    padding: 5px;
+    border: 1px solid #eee;
+  }
+  .pageTitle{
+      height: 30px;
+      line-height: 30px;
+      padding: 5px 10px; text-align: left;background-color: #eee;
+  }
+  /deep/ .el-dialog__body {
+      padding: 0 20px;
+  }
 
-    .goodImg {
-        float: left;
-        display: block;
-        border: 1px solid #eee;
-        border-radius: 3px;
-        width: 155px;
-        height: 155px;
-        padding: 3px;
-        overflow: hidden;
-    }
+  .goodImg {
+      float: left;
+      display: block;
+      border: 1px solid #eee;
+      border-radius: 3px;
+      width: 155px;
+      height: 155px;
+      padding: 3px;
+      overflow: hidden;
+  }
 
-    /deep/ .el-upload-list--picture-card {
-        vertical-align: unset;
-    }
+  /deep/ .el-upload-list--picture-card {
+      vertical-align: unset;
+  }
 
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
+  .avatar-uploader .el-upload {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+  }
 
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
-    }
+  .avatar-uploader .el-upload:hover {
+      border-color: #409EFF;
+  }
 
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 150px;
-        height: 150px;
-        line-height: 150px;
-        text-align: center;
-    }
+  .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 150px;
+      height: 150px;
+      line-height: 150px;
+      text-align: center;
+  }
 
-    .avatar {
-        width: 150px;
-        height: 150px;
-        display: block;
-    }
+  .avatar {
+      width: 150px;
+      height: 150px;
+      display: block;
+  }
 
-    .w100 {
-        width: 100%;
-    }
+  .w100 {
+      width: 100%;
+  }
 </style>
